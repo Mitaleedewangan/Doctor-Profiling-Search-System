@@ -1,6 +1,7 @@
 import React ,{useState} from "react";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 function  UserRegister(){
     const navigate = useNavigate();
@@ -17,12 +18,35 @@ function  UserRegister(){
         }
     });
 
-    const handleChange =(e)=>{
-        setFormData({
-            ...formData,
-            [e.target.name]:e.target.value,
-        });
-    };
+    // const handleChange =(e)=>{
+    //     setFormData({
+    //         ...formData,
+    //         [e.target.name]:e.target.value,
+    //     });
+    // };
+
+    const handleChange = (e) => {
+  const { name, value } = e.target;
+
+  if (name.startsWith("location.")) {
+    // for nested location fields
+    const field = name.split(".")[1]; // "state", "city", "pincode"
+    setFormData((prev) => ({
+      ...prev,
+      location: {
+        ...prev.location,
+        [field]: value,
+      },
+    }));
+  } else {
+    // for normal fields
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  }
+};
+
 
     const handleSubmit = async(e)=>{
        e.preventDefault();
@@ -31,7 +55,16 @@ function  UserRegister(){
       const res = await axios.post("http://localhost:5000/api/users/register", formData);
 
         console.log(res.data);
-        alert(res.data.message || "registered successfully");
+         Swal.fire({
+                    title: "Success!",
+                    text: " Successful register",
+                    icon: "success",
+                    confirmButtonText: "Ok",
+                    customClass: "border-0",
+        
+                }).then(()=>{
+                    window.location.href = "/user/login";
+                })
         navigate('/user/login');
        }
        catch(error){

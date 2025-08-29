@@ -14,7 +14,7 @@ function ConfirmAppointment(){
             try{
                  const token = localStorage.getItem("doctorToken");
                  console.log(token);
-                const res = await axios.get("http://localhost:5000/api/appointments/user/getappointment",{
+                const res = await axios.get("http://localhost:5000/api/appointments/doctor/getappointment",{
                     headers:{
                         Authorization:`Bearer ${token}`
                     }

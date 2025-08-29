@@ -43,6 +43,26 @@ function Doctordashboard(){
         })
     }
 
+    //Delete profile function
+    const handleDeleteProfile = async(e)=>{
+        e.preventDefault();
+        try{
+            console.log("Sending Data",formData);
+            const res = await axios.delete(`http://localhost:5000/api/doctors/delete/${doctor._id}`,{
+                headers:{
+                    Authorization:`Bearer ${token}`
+                },
+            });
+            
+            alert("Profile Deleted Successfully");
+            localStorage.removeItem("doctorToken");
+            window.location.href = "/";
+        }
+        catch(error){
+            console.log("Error updating profile:",error);
+            alert("Failed to updating profile");
+        }
+      }
 
         //Update profile function
     const handleUpdateProfile = async(e)=>{
@@ -298,6 +318,11 @@ function Doctordashboard(){
                 >
                   View Appointments
                 </Link>
+
+                <button onClick={handleDeleteProfile} className="bg-red-600 hover:bg-red-700 px-6 py-2 rounded-lg">
+                  Delete Profile
+
+                </button>
               </div>
             </>
           ) : (
@@ -391,5 +416,6 @@ function Doctordashboard(){
     </div>
     )
 }
+
 
 export default Doctordashboard;

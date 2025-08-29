@@ -170,7 +170,7 @@ function AppointmentForm(){
          
 
         <div>
-            <label className="block mb-2">Notes</label>
+            <label className="block mb-2">Symptoms</label>
             <textarea name="notes" value={formData.notes || ""} onChange={handleChange} 
               className="w-full p-2 rounded bg-blue-800 text-white focus:outline-none" />
         </div>
@@ -180,8 +180,7 @@ function AppointmentForm(){
             <select name="status" value={formData.status || "Pending"} onChange={handleChange} 
               className="w-full p-2 rounded bg-blue-800 text-white focus:outline-none">
               <option value="Pending">Pending</option>
-              <option value="Confirmed">Confirmed</option>
-              <option value="Cancelled">Cancelled</option>
+             
             </select>
         </div>
 

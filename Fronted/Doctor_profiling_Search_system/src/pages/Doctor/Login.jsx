@@ -1,6 +1,7 @@
 import react ,{useState} from "react";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 
 
@@ -28,13 +29,29 @@ function Login(){
         try{
             const res = await axios.post("http://localhost:5000/api/doctors/login",formData);
             localStorage.setItem("doctorToken",res.data.token);
-            alert("Login Successful");
+           Swal.fire({
+                      title: "Success!",
+                      text: " Successful Login",
+                      icon: "Success",
+                      confirmButtonText: "Ok",
+                      customClass: "border-0",
+          
+                  }).then(()=>{
+                      window.location.href = "/doctor/dashboard";
+                  })
                 navigate('/doctor/dashboard');
         }
-       catch(error){
-    console.error("❌ Login Error:",error);
-    res.status(500).json({message:error.message});
+       catch (error) {
+    console.error("❌ Login Error:", error);
+
+    // agar server se response aaya hai (400, 401, etc.)
+    if (error.response) {
+        setError(error.response.data.message || "Invalid Credentials");
+    } else {
+        setError("Something went wrong, please try again.");
+    }
 }
+
         
     
     }

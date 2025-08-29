@@ -98,7 +98,7 @@ exports.getDoctorProfile = async(req,res)=>{
             return res.status(404).json({message:"Doctor not found"});
         }
 
-        res.json(req.doctor);
+        res.json(doctor);
 
     }
     catch(error){
@@ -144,28 +144,54 @@ exports.updateDoctorProfile = async(req,res)=>{
     }
     };
 
-    exports.searchDoctor = async(req,res)=>{
-        try{
-            const {specialization} = req.query;
-            console.log("Search Query Received:", specialization);
-            let query = {};
+    // exports.searchDoctor = async(req,res)=>{
+    //     try{
+    //         const {specialization} = req.query;
+    //         console.log("Search Query Received:", specialization);
+    //         let query = {};
 
-            if(specialization && specialization.trim() !== ""){
-                query.specialization = {$regex:specialization, $options:"i"};
-            }
-             console.log("MongoDB Query:", query);
-            // .select("-password") → Excludes the password field from the result
-                const doctors = await Doctor.find(query).select("-password");
+    //         if(specialization && specialization.trim() !== ""){
+    //             query.specialization = {$regex:specialization, $options:"i"};
+    //         }
+    //          console.log("MongoDB Query:", query);
+    //         // .select("-password") → Excludes the password field from the result
+    //             const doctors = await Doctor.find(query).select("-password");
 
-                return res.status(200).json(doctors); 
-            }
-            catch(error){
-                console.error(" Search Doctor Error:",error);
-                res.status(500).json({message:error.message})
-            }
-        };
+    //             return res.status(200).json(doctors); 
+    //         }
+    //         catch(error){
+    //             console.error(" Search Doctor Error:",error);
+    //             res.status(500).json({message:error.message})
+    //         }
+    //     };
 
     
+
+exports.searchDoctor = async (req, res) => {
+  try {
+    const { specialization, location } = req.query;
+    console.log("Search Query Received:", { specialization, location });
+
+    // Build dynamic query
+    const query = {};
+    if (specialization && specialization.trim() !== "") {
+      query.specialization = { $regex: specialization, $options: "i" }; // case-insensitive
+    }
+    if (location && location.trim() !== "") {
+      query.location = { $regex: location, $options: "i" };
+    }
+
+    console.log("MongoDB Query:", query);
+
+    // Fetch doctors excluding password field
+    const doctors = await Doctor.find(query).select("-password");
+
+    return res.status(200).json(doctors);
+  } catch (error) {
+    console.error("Search Doctor Error:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
 
 // ✅ Get Single Doctor by ID
 exports.getDoctorById = async (req, res) => {
@@ -188,5 +214,19 @@ exports.addDoctor = async (req, res) => {
     res.status(201).json(newDoctor);
   } catch (error) {
     res.status(400).json({ message: "Error adding doctor", error: error.message });
+  }
+};
+
+// ✅ Delete Doctor (for admin)
+exports.deleteDoctor = async (req, res) => {
+  try {
+    const doctor = await Doctor.findById(req.params.id);
+    if (!doctor) {
+      return res.status(404).json({ message: "Doctor not found" });
+    }
+    await Doctor.findByIdAndDelete(req.params.id);
+    res.status(200).json({ message: "Doctor deleted successfully" });
+  } catch (error) {
+    res.status(400).json({ message: "Error deleting doctor", error: error.message });
   }
 };

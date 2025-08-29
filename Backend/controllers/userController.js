@@ -9,7 +9,12 @@ const generateToken = (id)=>{
 
 exports.registerUser = async (req,res)=>{
     try{
+            console.log("📩 Incoming Register Body:", req.body);
+
+
         const {name,email,password,role,location}= req.body;
+
+        
 
         // check user already exists
         const userExists = await User.findOne({email});
@@ -55,7 +60,7 @@ exports.registerUser = async (req,res)=>{
                     const token = jwt.sign({id:user._id},process.env.JWT_SECRET,{expiresIn:"1d"});
 
                     res.json({message:"Login Successful",token,user:{
-                        id:user._id,
+                        _id:user._id,
                         name:user.name,
                         email:user.email,
                         role:user.role,
@@ -75,3 +80,16 @@ exports.registerUser = async (req,res)=>{
             }
         }
         
+
+        // ✅ Get Single Doctor by ID
+        exports.UsergetById = async (req, res) => {
+          try {
+            const user = await User.findById(req.params.id).select("-password");
+            if (!user) {
+              return res.status(404).json({ message: "User not found" });
+            }
+            res.json(user);
+          } catch (error) {
+            res.status(500).json({ message: "Server error", error: error.message });
+          }
+        }

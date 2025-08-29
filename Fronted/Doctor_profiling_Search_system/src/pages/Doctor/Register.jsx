@@ -1,6 +1,7 @@
 import React ,{useState} from "react";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 
 
@@ -38,7 +39,16 @@ function Register(){
             const res = await axios.post('http://localhost:5000/api/doctors/register',formData);
           
             console.log(res.data);
-              alert(res.data.message || "registered successfully");
+               Swal.fire({
+                          title: "Success!",
+                          text: " Successful Register",
+                          icon: "Success",
+                          confirmButtonText: "Ok",
+                          customClass: "border-0",
+              
+                      }).then(()=>{
+                          window.location.href = "/doctor/login";
+                      })
             navigate('/doctor/login');
         }
         catch(error){

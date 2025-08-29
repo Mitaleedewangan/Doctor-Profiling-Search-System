@@ -4,10 +4,18 @@ import axios from "axios";
 function AppointmentStatus() {
   const [appointments, setAppointments] = useState([]);
 
-  useEffect(() => {
-    axios.get("http://localhost:5000/api/appointments/user/getappointment")
-      .then(res => setAppointments(res.data));
+   useEffect(() => {
+    const token = localStorage.getItem("doctorToken"); // login ke baad jo token store hua tha
+    
+    axios.get("http://localhost:5000/api/appointments/User/all", {
+      headers: {
+        Authorization: `Bearer ${token}`  // 👈 yaha token bhejna zaroori hai
+      }
+    })
+    .then(res => setAppointments(res.data))
+    .catch(err => console.error(err));
   }, []);
+
 
   return (
    <div className=" bg-gradient-to-r from-blue-400 to-sky-200">
@@ -48,7 +56,7 @@ function AppointmentStatus() {
         <div className="border-r">
           <div className="p-3">
             <p className="font-semibold text-gray-700">Patient Name</p>
-            <p>{appt.patientName}</p>
+            <p>{appt.patientId?.name || "N/A"}</p>
           </div>
         </div>
         <div className="border-r">

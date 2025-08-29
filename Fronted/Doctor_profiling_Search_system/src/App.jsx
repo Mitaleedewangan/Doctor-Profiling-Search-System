@@ -7,6 +7,7 @@ import Login from './pages/Doctor/Login.jsx'
 import UserRegister from './pages/User/UserRegister.jsx'
 import Home from './pages/Home';
 import Userlogin from './pages/User/Userlogin';
+import UserProfile from './pages/User/UserProfile';
 import Doctordashboard from './pages/Doctor/Doctordashboard';
 import Userdashboard from './pages/User/Userdashboard';
 import DoctorProfile from './pages/Doctor/DoctorProfile';
@@ -25,6 +26,7 @@ function App() {
      <Routes>
        <Route path="/" element={<Home />} />
        <Route path="/user/login" element={<Userlogin />} />
+       <Route path="/user/profile" element={<UserProfile/>}/>
        <Route path="/doctor/login" element={<Login />} />
        <Route path="/doctor/register" element={<Register />} /> 
        <Route path="/doctor/dashboard" element={<Doctordashboard />} />

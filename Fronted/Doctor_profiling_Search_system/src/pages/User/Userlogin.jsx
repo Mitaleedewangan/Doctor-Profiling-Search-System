@@ -1,6 +1,7 @@
 import react ,{useState} from "react";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 
 function Login(){
@@ -28,12 +29,25 @@ function Login(){
 
         if(res.data && res.data.token){
             localStorage.setItem("patientToken",res.data.token);
+            localStorage.setItem("patientId",res.data.user._id);
+            console.log(res.data.user._id);
 
              const patientName = res.data.user?.name || formData.email;
             localStorage.setItem("patientName",patientName);
             
-        alert("Login Successful");
-        navigate('/user/dashboard');
+        Swal.fire({
+            title: "Success!",
+            text: " Successful Login",
+            icon: "success",
+            confirmButtonText: "Ok",
+            customClass: "border-0",
+
+        }).then(()=>{
+            navigate("/user/dashboard");
+        })
+        // ✅ Clear form after successful login
+        setFormData({ email: "", password: "" });
+       
        }
        else{
         setError("Login Failed");

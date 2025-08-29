@@ -20,9 +20,7 @@ const userSchema = new mongoose.Schema({
         type:String,
          required:true,
     },
-    location:{
-        type:Object,
-        required:true,
+   
         location:{
             state:{
                 type:String,
@@ -38,7 +36,7 @@ const userSchema = new mongoose.Schema({
             }
     }
     }
-    }
+    
 );
 
 module.exports = mongoose.model('User',userSchema);
