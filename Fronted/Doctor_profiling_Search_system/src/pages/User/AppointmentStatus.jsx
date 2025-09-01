@@ -56,7 +56,7 @@ function AppointmentStatus() {
         <div className="border-r">
           <div className="p-3">
             <p className="font-semibold text-gray-700">Patient Name</p>
-            <p>{appt.patientId?.name || "N/A"}</p>
+            <p>{ appt.patientName || appt.patientId?.name ||"N/A"}</p>
           </div>
         </div>
         <div className="border-r">

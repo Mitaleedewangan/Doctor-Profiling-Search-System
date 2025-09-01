@@ -170,7 +170,7 @@ function AppointmentForm(){
          
 
         <div>
-            <label className="block mb-2">Symptoms</label>
+            <label className="block mb-2">Reasons for Visit</label>
             <textarea name="notes" value={formData.notes || ""} onChange={handleChange} 
               className="w-full p-2 rounded bg-blue-800 text-white focus:outline-none" />
         </div>

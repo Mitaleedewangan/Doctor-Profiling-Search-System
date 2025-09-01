@@ -6,7 +6,12 @@ exports.bookAppointment = async(req,res)=>{
     try{
         const appointment = await Appointment.create({
             ...req.body,
-        patientId:req.user._id,});
+        patientId:req.user._id,
+        patientName: req.user.name,
+
+        
+        });
+       
         res.status(201).json(appointment);
     }
     catch(err){
@@ -19,7 +24,7 @@ exports.bookAppointment = async(req,res)=>{
 exports.getAppointment = async(req,res)=>{
     try{
        console.log(req.user);
-      const doctorId = req.doctor._id;
+      const doctorId = req.user._id;
      
       if (!doctorId) {
       return res.status(401).json({ message: "Doctor not authorized" });
